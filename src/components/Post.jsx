@@ -6,31 +6,14 @@ import { Comment } from './Comment'
 import styles from './Post.module.css'
 import { useState } from 'react'
 
-// author: {avatar_url: "", name: "", role: ""}
-// publishedAt: Date
-// content: String
-
-// export function Post(props) {
-
-//estados
-// const comments = [
-//     1,
-//     2,
-//     3
-// ]
 
 export function Post({ author, publishedAt, content }) {
 
-    // const publishedDateFormated = new Intl.DateTimeFormat('pt-BR', {
-    //     day: '2-digit',
-    //     month: 'long',
-    //     hour: '2-digit',
-    //     minute: '2-digit'
-    // }).format(publishedAt)
     const [comments, setComments] = useState([
         'Post muito bacana, hein?!'
-
     ])
+
+    const [newCommentText, setNewCommentText] = useState('')
 
     const publishedDateFormated = format(publishedAt, "dd 'de' LLLL 'às' HH:mm'h'", {
         locale: ptBR
@@ -44,14 +27,16 @@ export function Post({ author, publishedAt, content }) {
     function handleCreateNewComment() {
         event.preventDefault()
 
-        const newCommentText = event.target.comment.value
-        console.log(event.target.comment.value)
+        setComments([...comments, newCommentText])  
+        setNewCommentText('') 
         
-        // setComments([...comments, comments.length + 1])
-         setComments([...comments, newCommentText])
-         event.target.comment.value = ''
+    }
 
-
+    function handlenewCommentChange() {
+        // console.log('teste')
+        // console.log(event.target.value)
+        setNewCommentText(event.target.value)
+       
     }
 
     return (
@@ -85,6 +70,8 @@ export function Post({ author, publishedAt, content }) {
                 <textarea
                     name='comment'
                     placeholder='Deixe um comentário'
+                    value={newCommentText}
+                    onChange={handlenewCommentChange} //monitora o que a gente escreve
                 />
                 <footer>
                     <button type='submit'>Publicar</button>
