@@ -32,20 +32,29 @@ export function Post({ author, publishedAt, content }) {
 
     }
 
-    function handlenewCommentChange() {
+    function handleNewCommentChange() {
+        event.target.setCustomValidity('')
         // console.log('teste')
         // console.log(event.target.value)
         setNewCommentText(event.target.value)
     }
 
+
+    function handleNewCommentInvalid() {
+        event.target.setCustomValidity('Esse campo é obrigatório!')
+    }
+
     function deleteComment(commentToDelete) {
-    //imutabilidade -> as variáveis não sofrem mutação, nós criamos um novo valor (um novo espaço na memória)
-    const commentsWithoutDeletedOne = comments.filter(comment => {
-        return comment !== commentToDelete
-    })
+        //imutabilidade -> as variáveis não sofrem mutação, nós criamos um novo valor (um novo espaço na memória)
+        const commentsWithoutDeletedOne = comments.filter(comment => {
+            return comment !== commentToDelete
+        })
         setComments(commentsWithoutDeletedOne)
         // console.log(`Deletar comentário ${comment}`)
     }
+
+    const isNewCommentInputEmput = newCommentText.length === 0
+
 
     return (
         <article className={styles.post}>
@@ -79,10 +88,12 @@ export function Post({ author, publishedAt, content }) {
                     name='comment'
                     placeholder='Deixe um comentário'
                     value={newCommentText}
-                    onChange={handlenewCommentChange} //monitora o que a gente escreve
+                    onChange={handleNewCommentChange} //monitora o que a gente escreve
+                    onInvalid={handleNewCommentInvalid}
+                    required
                 />
                 <footer>
-                    <button type='submit'>Publicar</button>
+                    <button type='submit' disabled={isNewCommentInputEmput}>Publicar</button>
                 </footer>
             </form>
 
@@ -90,11 +101,11 @@ export function Post({ author, publishedAt, content }) {
                 {
                     comments.map(comment => {
                         return (
-                        <Comment
-                            key={comment}
-                            content={comment}
-                            onDeleteComment={deleteComment}
-                        />)
+                            <Comment
+                                key={comment}
+                                content={comment}
+                                onDeleteComment={deleteComment}
+                            />)
                     })
                 }
             </div>
